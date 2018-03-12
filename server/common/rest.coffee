@@ -17,7 +17,7 @@ routeResource = (name, app, middleware, controller) ->
   , middleware, controller.update, @_respondIfOk)
   app.get( '/api/' + name + '/:id'
   , middleware, controller.show, @_respondIfOk)
-  app.del( '/api/' + name + '/:id'
+  app.delete( '/api/' + name + '/:id'  #Changed 'app.del' to 'app.delete' for express 4.x compatibility
   , middleware, controller.destroy, @_respondIfOk)
   app.post('/api/' + name + '/query'
   , middleware, controller.index, @_respondIfOk)
