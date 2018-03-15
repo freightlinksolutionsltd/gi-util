@@ -1,8 +1,8 @@
 respondIfOk = (req, res) ->
   if res.giResult?
-    res.json 200, res.giResult
+    res.status(200).json(res.giResult) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
   else
-    res.json 500, {message: 'something went wrong'}
+    res.status(500).json({message: 'something went wrong'}) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
 
 routeResource = (name, app, middleware, controller) ->
   app.get( '/api/' + name
