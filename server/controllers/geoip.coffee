@@ -18,10 +18,10 @@ module.exports = () ->
       common.log 'back from goinc api'
       if err?
         common.log 'error: ' + err
-        res.json 500, err
+        res.status(500).json(err) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
       else
         common.log body
         if response.statusCode is 200
-          res.json 200, JSON.parse(body)
+          res.status(200).json(JSON.parse(body)) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
         else
-          res.json 404, {}
+          res.status(404).json({}) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
