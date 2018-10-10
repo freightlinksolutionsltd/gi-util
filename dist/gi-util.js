@@ -1,5 +1,6 @@
 angular.module('gi.util', ['ngResource', 'ngCookies', 'logglyLogger', 'ngTouch', 'ngRoute', 'ng.deviceDetector']).value('version', '1.9.5').config([
-  'giLogProvider', function(giLogProvider) {
+  'giLogProvider',
+  function(giLogProvider) {
     if (typeof loggly !== "undefined" && loggly !== null) {
       giLogProvider.setLogglyToken(loggly.key);
       giLogProvider.setLogglyTags("angular," + loggly.tags);
@@ -9,12 +10,22 @@ angular.module('gi.util', ['ngResource', 'ngCookies', 'logglyLogger', 'ngTouch',
 ]);
 
 angular.module('gi.util').directive('giMatch', [
-  '$parse', 'giLog', function($parse, Log) {
+  '$parse',
+  'giLog',
+  function($parse,
+  Log) {
     return {
       require: '?ngModel',
       restrict: 'A',
-      link: function(scope, elem, attrs, ctrl) {
-        var evaluateMatch, getMatchValue, isRequired, matchGetter, requiredGetter;
+      link: function(scope,
+  elem,
+  attrs,
+  ctrl) {
+        var evaluateMatch,
+  getMatchValue,
+  isRequired,
+  matchGetter,
+  requiredGetter;
         if (!ctrl) {
           Log.warn('giMatch validation requires ngModel to be on the element');
           return;
@@ -23,10 +34,15 @@ angular.module('gi.util').directive('giMatch', [
         }
         matchGetter = $parse(attrs.giMatch);
         requiredGetter = $parse(attrs.ngRequired);
+        //So it feels like this function is surplus to requirements,
+        //but without it wrapping the get Match VAlue function the $watch
+        //doesn't fire when you need it to.
         evaluateMatch = function() {
           return getMatchValue();
         };
-        scope.$watch(evaluateMatch, function(newVal) {
+        //I can't see this function documented anywhere, so we should be careful
+        scope.$watch(evaluateMatch,
+  function(newVal) {
           return ctrl.$$parseAndValidate();
         });
         ctrl.$validators.giMatch = function() {
@@ -36,9 +52,11 @@ angular.module('gi.util').directive('giMatch', [
             if (match != null) {
               return ctrl.$viewValue === match;
             } else {
+              //in this case, as there is no password, we have nothing to match
               return true;
             }
           } else {
+            //We need not botther validating if the field is not required
             return true;
           }
         };
@@ -66,12 +84,18 @@ angular.module('gi.util').provider('giAnalytics', function() {
     google = ga;
   }
   this.$get = [
-    'giLog', function(Log) {
-      var requireGaPlugin, sendAddToCart, sendDetailView, sendImpression, sendPageView;
+    'giLog',
+    function(Log) {
+      var requireGaPlugin,
+    sendAddToCart,
+    sendDetailView,
+    sendImpression,
+    sendPageView;
       requireGaPlugin = function(x) {
         Log.debug('ga requiring ' + x);
         if (google != null) {
-          return google('require', x);
+          return google('require',
+    x);
         }
       };
       sendImpression = function(obj) {
@@ -80,13 +104,15 @@ angular.module('gi.util').provider('giAnalytics', function() {
             requireGaPlugin('ec');
           }
           Log.debug('ga sending impression ' + obj.name);
-          return google('ec:addImpression', obj);
+          return google('ec:addImpression',
+    obj);
         }
       };
       sendPageView = function() {
         if (google != null) {
           Log.debug('ga sending page view');
-          return google('send', 'pageview');
+          return google('send',
+    'pageview');
         }
       };
       sendAddToCart = function(obj) {
@@ -94,11 +120,18 @@ angular.module('gi.util').provider('giAnalytics', function() {
           if (!enhancedEcommerce) {
             requireGaPlugin('ec');
           }
-          ga('ec:addProduct', obj);
-          ga('ec:setAction', 'add', {
+          ga('ec:addProduct',
+    obj);
+          ga('ec:setAction',
+    'add',
+    {
             list: obj.category
           });
-          return ga('send', 'event', 'UX', 'click', 'add to cart');
+          return ga('send',
+    'event',
+    'UX',
+    'click',
+    'add to cart');
         }
       };
       sendDetailView = function(obj) {
@@ -107,8 +140,14 @@ angular.module('gi.util').provider('giAnalytics', function() {
             requireGaPlugin('ec');
           }
           sendPageView();
-          ga('ec:addImpression', obj);
-          return ga('send', 'event', 'Detail', 'click', 'View Detail: ' + obj.id, 1);
+          ga('ec:addImpression',
+    obj);
+          return ga('send',
+    'event',
+    'Detail',
+    'click',
+    'View Detail: ' + obj.id,
+    1);
         }
       };
       return {
@@ -123,10 +162,18 @@ angular.module('gi.util').provider('giAnalytics', function() {
 });
 
 angular.module('gi.util').factory('giCrud', [
-  '$resource', '$q', 'giSocket', function($resource, $q, Socket) {
-    var factory, formDirectiveFactory;
-    formDirectiveFactory = function(name, Model) {
-      var formName, lowerName;
+  '$resource',
+  '$q',
+  'giSocket',
+  function($resource,
+  $q,
+  Socket) {
+    var factory,
+  formDirectiveFactory;
+    formDirectiveFactory = function(name,
+  Model) {
+      var formName,
+  lowerName;
       lowerName = name.toLowerCase();
       formName = lowerName + 'Form';
       return {
@@ -147,17 +194,21 @@ angular.module('gi.util').factory('giCrud', [
                   type: 'success',
                   msg: name + " Saved."
                 };
-                $scope.$emit('event:show-alert', alert);
-                $scope.$emit(lowerName + '-saved', $scope.model.selectedItem);
+                $scope.$emit('event:show-alert',
+  alert);
+                $scope.$emit(lowerName + '-saved',
+  $scope.model.selectedItem);
                 return $scope.clear();
-              }, function(err) {
+              },
+  function(err) {
                 var alert;
                 alert = {
                   name: lowerName + '-not-saved',
                   type: 'danger',
                   msg: "Failed to save " + name + ". " + err.data.error
                 };
-                return $scope.$emit('event:show-alert', alert);
+                return $scope.$emit('event:show-alert',
+  alert);
               });
             };
             $scope.clear = function() {
@@ -175,17 +226,20 @@ angular.module('gi.util').factory('giCrud', [
                     type: 'success',
                     msg: name + ' Deleted.'
                   };
-                  $scope.$emit('event:show-alert', alert);
+                  $scope.$emit('event:show-alert',
+  alert);
                   $scope.$emit(lowerName + '-deleted');
                   return $scope.clear();
-                }, function() {
+                },
+  function() {
                   var alert;
                   alert = {
                     name: name + " not deleted",
                     msg: name + " not deleted.",
                     type: "warning"
                   };
-                  $scope.$emit('event:show-alert', alert);
+                  $scope.$emit('event:show-alert',
+  alert);
                   return $scope.confirm = false;
                 });
               } else {
@@ -196,8 +250,29 @@ angular.module('gi.util').factory('giCrud', [
         }
       };
     };
-    factory = function(resourceName, prefix, idField) {
-      var _version, all, allCached, bulkMethods, bulkResource, clearCache, count, destroy, exports, get, getCached, items, itemsById, methods, queryMethods, queryResource, resource, save, updateMasterList, version;
+    factory = function(resourceName,
+  prefix,
+  idField) {
+      var _version,
+  all,
+  allCached,
+  bulkMethods,
+  bulkResource,
+  clearCache,
+  count,
+  destroy,
+  exports,
+  get,
+  getCached,
+  items,
+  itemsById,
+  methods,
+  queryMethods,
+  queryResource,
+  resource,
+  save,
+  updateMasterList,
+  version;
       if (prefix == null) {
         prefix = '/api';
       }
@@ -235,19 +310,31 @@ angular.module('gi.util').factory('giCrud', [
           isArray: true
         }
       };
-      bulkResource = $resource(prefix + '/' + resourceName + '', {}, bulkMethods);
-      resource = $resource(prefix + '/' + resourceName + '/:id', {}, methods);
-      queryResource = $resource(prefix + '/' + resourceName + '/query', {}, queryMethods);
+      bulkResource = $resource(prefix + '/' + resourceName + '',
+  {},
+  bulkMethods);
+      resource = $resource(prefix + '/' + resourceName + '/:id',
+  {},
+  methods);
+      queryResource = $resource(prefix + '/' + resourceName + '/query',
+  {},
+  queryMethods);
       items = [];
       itemsById = {};
       updateMasterList = function(newItem) {
         var replaced;
         replaced = false;
         if (angular.isArray(newItem)) {
-          angular.forEach(newItem, function(newRec, i) {
+          angular.forEach(newItem,
+  function(newRec,
+  i) {
+            // Nice quick check if the item already exists in the master list
             replaced = false;
             if (itemsById[newRec[idField]] != null) {
-              angular.forEach(items, function(item, j) {
+              // Find and update
+              angular.forEach(items,
+  function(item,
+  j) {
                 if (!replaced) {
                   if (item[idField] === newRec[idField]) {
                     items[j] = newRec;
@@ -262,7 +349,9 @@ angular.module('gi.util').factory('giCrud', [
           });
         } else {
           replaced = false;
-          angular.forEach(items, function(item, index) {
+          angular.forEach(items,
+  function(item,
+  index) {
             if (!replaced) {
               if (newItem[idField] === item[idField]) {
                 replaced = true;
@@ -277,7 +366,10 @@ angular.module('gi.util').factory('giCrud', [
         }
       };
       all = function(params) {
-        var cacheable, deferred, options, r;
+        var cacheable,
+  deferred,
+  options,
+  r;
         deferred = $q.defer();
         options = {};
         cacheable = true;
@@ -292,15 +384,19 @@ angular.module('gi.util').factory('giCrud', [
           if ((params != null ? params.query : void 0) != null) {
             r = queryResource;
           }
-          r.query(options, function(results) {
+          r.query(options,
+  function(results) {
             if (cacheable) {
               items = results;
-              angular.forEach(results, function(item, index) {
+              angular.forEach(results,
+  function(item,
+  index) {
                 return itemsById[item[idField]] = item;
               });
             }
             return deferred.resolve(results);
-          }, function(err) {
+          },
+  function(err) {
             return deferred.reject(err);
           });
         }
@@ -310,27 +406,38 @@ angular.module('gi.util').factory('giCrud', [
         var deferred;
         deferred = $q.defer();
         if (angular.isArray(item)) {
-          bulkResource.save({}, item, function(result) {
+          bulkResource.save({},
+  item,
+  function(result) {
             updateMasterList(result);
             return deferred.resolve(result);
-          }, function(failure) {
+          },
+  function(failure) {
             return deferred.reject(failure);
           });
         } else {
           if (item[idField]) {
+            //we are updating
             resource.save({
               id: item[idField]
-            }, item, function(result) {
+            },
+  item,
+  function(result) {
               updateMasterList(result);
               return deferred.resolve(result);
-            }, function(failure) {
+            },
+  function(failure) {
               return deferred.reject(failure);
             });
           } else {
-            resource.create({}, item, function(result) {
+            //we are createing a new object on the server
+            resource.create({},
+  item,
+  function(result) {
               updateMasterList(result);
               return deferred.resolve(result);
-            }, function(failure) {
+            },
+  function(failure) {
               return deferred.reject(failure);
             });
           }
@@ -348,12 +455,14 @@ angular.module('gi.util').factory('giCrud', [
         deferred = $q.defer();
         resource.get({
           id: id
-        }, function(item) {
+        },
+  function(item) {
           if (items.length > 0) {
             updateMasterList(item);
           }
           return deferred.resolve(item);
-        }, function(err) {
+        },
+  function(err) {
           return deferred.reject(err);
         });
         return deferred.promise;
@@ -361,22 +470,27 @@ angular.module('gi.util').factory('giCrud', [
       destroy = function(id) {
         var deferred;
         deferred = $q.defer();
-        resource["delete"]({
+        resource.delete({
           id: id
-        }, function() {
+        },
+  function() {
           var removed;
           removed = false;
           delete itemsById[id];
-          angular.forEach(items, function(item, index) {
+          angular.forEach(items,
+  function(item,
+  index) {
             if (!removed) {
               if (item[idField] === id) {
                 removed = true;
-                return items.splice(index, 1);
+                return items.splice(index,
+  1);
               }
             }
           });
           return deferred.resolve();
-        }, function(err) {
+        },
+  function(err) {
           return deferred.reject(err);
         });
         return deferred.promise;
@@ -389,11 +503,13 @@ angular.module('gi.util').factory('giCrud', [
         return itemsById = {};
       };
       Socket.emit('watch:' + resourceName);
-      Socket.on(resourceName + '_created', function(data) {
+      Socket.on(resourceName + '_created',
+  function(data) {
         updateMasterList(data);
         return _version += 1;
       });
-      Socket.on(resourceName + '_updated', function(data) {
+      Socket.on(resourceName + '_updated',
+  function(data) {
         updateMasterList(data);
         return _version += 1;
       });
@@ -417,6 +533,7 @@ angular.module('gi.util').factory('giCrud', [
       return exports;
     };
     return {
+      //export the crud factory method
       factory: factory,
       formDirectiveFactory: formDirectiveFactory
     };
@@ -424,17 +541,24 @@ angular.module('gi.util').factory('giCrud', [
 ]);
 
 angular.module('gi.util').factory('giGeo', [
-  '$q', '$http', '$cookieStore', function($q, $http, $cookies) {
+  '$q',
+  '$http',
+  '$cookieStore',
+  function($q,
+  $http,
+  $cookies) {
     var cookieID;
     cookieID = "giGeo";
     return {
       country: function() {
-        var deferred, geoInfo;
+        var deferred,
+  geoInfo;
         deferred = $q.defer();
         geoInfo = $cookies.get(cookieID);
         if (geoInfo == null) {
           $http.get("/api/geoip").success(function(info) {
-            $cookies.put(cookieID, info);
+            $cookies.put(cookieID,
+  info);
             return deferred.resolve(info.country_code);
           }).error(function(data) {
             return deferred.reject(data);
@@ -450,14 +574,17 @@ angular.module('gi.util').factory('giGeo', [
 
 angular.module('gi.util').provider('giI18n', [
   function() {
-    var countries, defaultCountryCode;
+    var countries,
+  defaultCountryCode;
     countries = {};
     defaultCountryCode = "ROW";
-    this.setMessagesForCountry = function(messages, countryCode) {
+    this.setMessagesForCountry = function(messages,
+  countryCode) {
       if (countries[countryCode] == null) {
         countries[countryCode] = {};
       }
-      return angular.forEach(messages, function(msg) {
+      return angular.forEach(messages,
+  function(msg) {
         return countries[countryCode][msg.key] = msg.value;
       });
     };
@@ -496,7 +623,8 @@ angular.module('gi.util').provider('giI18n', [
 ]);
 
 angular.module('gi.util').factory('giLocalStorage', [
-  '$window', function($window) {
+  '$window',
+  function($window) {
     return {
       get: function(key) {
         if ($window.localStorage[key]) {
@@ -505,7 +633,8 @@ angular.module('gi.util').factory('giLocalStorage', [
           return false;
         }
       },
-      set: function(key, val) {
+      set: function(key,
+  val) {
         if (val == null) {
           $window.localStorage.removeItem(key);
         } else {
@@ -518,8 +647,10 @@ angular.module('gi.util').factory('giLocalStorage', [
 ]);
 
 angular.module('gi.util').provider('giLog', [
-  'LogglyLoggerProvider', function(LogglyLoggerProvider) {
-    var prefix, wrap;
+  'LogglyLoggerProvider',
+  function(LogglyLoggerProvider) {
+    var prefix,
+  wrap;
     prefix = "";
     this.setLogglyToken = function(token) {
       if (token != null) {
@@ -564,7 +695,8 @@ angular.module('gi.util').provider('giLog', [
       }
     };
     this.$get = [
-      '$log', function($log) {
+      '$log',
+      function($log) {
         return {
           log: function(msg) {
             return $log.log(wrap(msg));
@@ -589,33 +721,45 @@ angular.module('gi.util').provider('giLog', [
 ]);
 
 angular.module('gi.util').factory('giSocket', [
-  '$rootScope', function($rootScope) {
+  '$rootScope',
+  function($rootScope) {
     var socket;
     if (typeof io !== "undefined" && io !== null) {
       socket = io.connect();
     }
     return {
-      on: function(eventName, callback) {
+      on: function(eventName,
+  callback) {
         if (typeof io !== "undefined" && io !== null) {
-          return socket.on(eventName, function() {
+          return socket.on(eventName,
+  function() {
             var args;
+            // This is some javascript magic proto inheritance maybe?
+            // Tried taking it out and it breaks, but no idea where
+            // the arguments variable comes from
             args = arguments;
             if (callback) {
               return $rootScope.$apply(function() {
-                return callback.apply(socket, args);
+                return callback.apply(socket,
+  args);
               });
             }
           });
         }
       },
-      emit: function(eventName, data, callback) {
+      emit: function(eventName,
+  data,
+  callback) {
         if (typeof io !== "undefined" && io !== null) {
-          return socket.emit(eventName, data, function() {
+          return socket.emit(eventName,
+  data,
+  function() {
             var args;
             args = arguments;
             if (callback) {
               return $rootScope.$apply(function() {
-                return callback.apply(socket, args);
+                return callback.apply(socket,
+  args);
               });
             }
           });
@@ -625,7 +769,7 @@ angular.module('gi.util').factory('giSocket', [
   }
 ]);
 
-var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+var indexOf = [].indexOf;
 
 angular.module('gi.util').factory('giUtil', [
   function() {
@@ -634,9 +778,12 @@ angular.module('gi.util').factory('giUtil', [
       vatRegex: /^(AT|BE|BG|CY|CZ|DE|DK|EE|EL|ES|FI|FR|GB|HU|IE|IT|LT|LU|LV|MT|NL|PL|PT|SE|SI|SK|RO)(\w{8,12})$/,
       countrySort: function(topCodes) {
         return function(country) {
-          var index, ref;
+          var index,
+  ref;
           if ((country != null ? country.code : void 0) != null) {
-            index = (ref = country.code, indexOf.call(topCodes, ref) >= 0);
+            index = (ref = country.code,
+  indexOf.call(topCodes,
+  ref) >= 0);
             if (index) {
               return topCodes.indexOf(country.code);
             } else {
