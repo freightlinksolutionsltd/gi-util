@@ -47,7 +47,7 @@ module.exports =
 
     uri = getConnectionString(conf)
 
-    mongoose.connect uri, {}
+    mongoose.connect uri, { useNewUrlParser: true }
 
     mongoose.connection.on 'connected',  () ->
       cb() if cb
