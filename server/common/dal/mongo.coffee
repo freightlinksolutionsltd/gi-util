@@ -58,6 +58,7 @@ module.exports =
   sessionStore: (express, conf, cb) ->
     options =
       url: getConnectionString(conf)
+      autoRemove: "interval"
     MongoStore = connectMongo(express)
 
     sessionStore = new MongoStore(options)
