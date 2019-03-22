@@ -155,7 +155,7 @@ module.exports = (model) ->
   count = (req, res, next) ->
     options = helper.getOptions req, model
 
-    model.countDocuments options.query
+    model.count options.query
     , (err, result) ->
       if err
         res.status(404).json({message: err}) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility
