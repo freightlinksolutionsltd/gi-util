@@ -5,27 +5,30 @@ crudModelFactory = require '../crudModelFactory'
 connectMongo = require 'connect-mongo'
 
 getConnectionString = (conf) ->
-  uri = "mongodb://"
-
-  if conf.username?
-    uri += conf.username + ":" + conf.password + "@"
-
-  separator = ""
-  if conf.servers?
-    _.each conf.servers, (server) ->
-      uri += separator +  server.host + ":" + server.port
-      separator = ","
+  if conf.F2F2_MONGO_PATH
+    conf.F2F2_MONGO_PATH
   else
-    uri += conf.host + ":" + conf.port
+    uri = "mongodb://"
 
-  uri += "/" + conf.name
-  if conf.ssl
-    uri += "?ssl=true"
-  else
-    uri += "?ssl=false"
-  if conf.authSource?
-    uri += "&authSource=" + conf.authSource
-  uri
+    if conf.username?
+      uri += conf.username + ":" + conf.password + "@"
+
+    separator = ""
+    if conf.servers?
+      _.each conf.servers, (server) ->
+        uri += separator +  server.host + ":" + server.port
+        separator = ","
+    else
+      uri += conf.host + ":" + conf.port
+
+    uri += "/" + conf.name
+    if conf.ssl
+      uri += "?ssl=true"
+    else
+      uri += "?ssl=false"
+    if conf.authSource?
+      uri += "&authSource=" + conf.authSource
+    uri
 
 schemaFactory = (def) ->
   if def.options?
