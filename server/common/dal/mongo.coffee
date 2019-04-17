@@ -5,8 +5,8 @@ crudModelFactory = require '../crudModelFactory'
 connectMongo = require 'connect-mongo'
 
 getConnectionString = (conf) ->
-  if conf.F2F2_MONGO_PATH
-    conf.F2F2_MONGO_PATH
+  if conf.connectionString
+    conf.connectionString
   else
     uri = "mongodb://"
 
