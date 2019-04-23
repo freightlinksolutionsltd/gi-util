@@ -128,7 +128,7 @@ module.exports = (Resource) ->
         else
           callback null
   
-  aggregate: (steps, cb) ->
+  aggregate = (steps, cb) ->
     Resource.aggregate steps, cb
 
   find: find
