@@ -127,6 +127,9 @@ module.exports = (Resource) ->
           Resource.remove {_id: resource._id, systemId: systemId}, callback
         else
           callback null
+  
+  aggregate: (steps, cb) ->
+    Resource.aggregate steps, cb
 
   find: find
   findById: findById
@@ -137,3 +140,4 @@ module.exports = (Resource) ->
   destroy: destroy
   name: Resource.modelName
   count: count
+  aggregate: aggregate
