@@ -14,7 +14,7 @@ module.exports = (Resource) ->
   find = (options, callback) ->
     if options?
       if options.max?
-        max = options.max
+        max = parseInt options.max
       else
         max = 10000
 
