@@ -15,8 +15,8 @@ module.exports = (Resource) ->
     if options?
       if options.max?
         max = parseInt options.max
-      else
-        max = 10000
+      #else
+      #  max = 10000
 
       if options.sort?
         sort = 'field ' + options.sort
