@@ -98,6 +98,19 @@ module.exports = (Resource) ->
   findById = (id, systemId, callback) ->
     @findOneBy '_id', id, systemId, callback
 
+  findWithCursor = (opts) ->
+    command = Resource.find(opts.query)
+    if opts.sort?
+      command.sort opts.sort
+    
+    if opts.populate?
+      command.populate opts.populate
+
+    if opts.select?
+      command.select opts.select
+
+    command.cursor()
+
   create = (json, callback) ->
     if not json.systemId?
       callback Resource.modelName  + ' could not be created - no systemId'
@@ -135,6 +148,7 @@ module.exports = (Resource) ->
   findById: findById
   findOne: findOne
   findOneBy: findOneBy
+  findWithCursor: findWithCursor
   create: create
   update: update
   destroy: destroy
