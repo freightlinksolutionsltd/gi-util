@@ -29,7 +29,7 @@ module.exports = (model) ->
     async.each req.body, (obj, cb) ->
       obj.systemId = req.systemId
       if obj._id?
-        model.update obj._id, obj, (err, result) ->
+        model.updateOne obj._id, obj, (err, result) ->
           if err
             errors.push {message: err, obj: obj}
             cb()
@@ -155,7 +155,7 @@ module.exports = (model) ->
   count = (req, res, next) ->
     options = helper.getOptions req, model
 
-    model.count options.query
+    model.countDocuments options.query
     , (err, result) ->
       if err
         res.status(404).json({message: err}) #Changed 'res.json(status,obj)' to 'res.status(status).json(obj)' for express 4.x compatibility

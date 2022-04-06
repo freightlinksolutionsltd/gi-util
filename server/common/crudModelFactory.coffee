@@ -5,7 +5,7 @@ module.exports = (Resource) ->
       callback 'Cannot count ' +
       Resource.modelName + '- no SystemId', null
     else
-      Resource.count query, (err, count) ->
+      Resource.countDocuments query, (err, count) ->
         if err
           callback 'could not count the results', -1
         else
@@ -67,7 +67,7 @@ module.exports = (Resource) ->
         if err
           callback err, null, 0
         else
-          Resource.count query, (err, count) ->
+          Resource.countDocuments query, (err, count) ->
             if err
               callback('could not count the results', null, 0, 0) if callback
             else
@@ -137,7 +137,7 @@ module.exports = (Resource) ->
         if err
           callback err
         else if resource
-          Resource.remove {_id: resource._id, systemId: systemId}, callback
+          Resource.deleteOne {_id: resource._id, systemId: systemId}, callback
         else
           callback null
   
