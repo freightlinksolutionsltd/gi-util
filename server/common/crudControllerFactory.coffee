@@ -29,7 +29,7 @@ module.exports = (model) ->
     async.each req.body, (obj, cb) ->
       obj.systemId = req.systemId
       if obj._id?
-        model.updateOne obj._id, obj, (err, result) ->
+        model.update obj._id, obj, (err, result) ->
           if err
             errors.push {message: err, obj: obj}
             cb()
