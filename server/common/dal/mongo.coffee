@@ -60,11 +60,11 @@ module.exports =
 
   sessionStore: (express, conf, cb) ->
     options =
-      url: getConnectionString(conf)
+      mongoUrl: getConnectionString(conf)
       autoRemove: "interval"
-    MongoStore = connectMongo(express)
+    #MongoStore = new connectMongo(express)
 
-    sessionStore = new MongoStore(options)
+    sessionStore = connectMongo.create(options)
     sessionStore
 
   crudFactory: crudModelFactory

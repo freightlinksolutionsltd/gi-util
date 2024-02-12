@@ -14,7 +14,7 @@
     "async": "~2.6.1",
     "chai": "~4.2.0",
     "coffeescript": "~2.3.2",
-    "connect-mongo": "^2.0.3",
+    "connect-mongo": "5.1.0",
     "loggly": "^1.0.8",
     "moment": "~2.22.2",
     "mongoose": "5.13.14",
