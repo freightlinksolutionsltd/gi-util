@@ -1,6 +1,5 @@
 _ = require 'underscore'
 mongoose = require 'mongoose'
-require('mongoose-long')(mongoose)
 crudModelFactory = require '../crudModelFactory'
 connectMongo = require 'connect-mongo'
 
@@ -50,7 +49,7 @@ module.exports =
 
     uri = getConnectionString(conf)
 
-    mongoose.connect uri, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true }
+    mongoose.connect uri, { useNewUrlParser: true, useUnifiedTopology: true }
 
     mongoose.connection.on 'connected',  () ->
       cb() if cb
