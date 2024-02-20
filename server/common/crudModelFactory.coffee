@@ -153,6 +153,10 @@ module.exports = (Resource) ->
     else
       callback Resource.modelName + ' could not be found'
 
+  aggregateWithCursor = (steps) ->
+    resource = await Resource.aggregate(steps).allowDiskUse(true).cursor({batchSize: 0})
+    resource
+
   find: find
   findById: findById
   findOne: findOne
@@ -164,3 +168,4 @@ module.exports = (Resource) ->
   name: Resource.modelName
   count: count
   aggregate: aggregate
+  aggregateWithCursor: aggregateWithCursor
