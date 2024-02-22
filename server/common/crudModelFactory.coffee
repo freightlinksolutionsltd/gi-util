@@ -140,7 +140,7 @@ module.exports = (Resource) ->
         callback 'No resource to destroy'
       else if resource
         deleteResource = await Resource.deleteOne {_id: resource._id, systemId: systemId}
-        callback deleteResource
+        callback null, deleteResource
       else
         callback Resource.modelName + ' could not be destroyed'
   
