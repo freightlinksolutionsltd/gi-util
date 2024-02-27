@@ -54,35 +54,48 @@ module.exports = (Resource) ->
     if max < 1
       callback(null, [], 0, 0) if callback
     else
-      command = Resource.find(query).sort(sort).skip(skipFrom).limit(max)
-      if options.populate?
-        command.populate populate
+      try 
+        command = Resource.find(query).sort(sort).skip(skipFrom).limit(max)
+        if options.populate?
+          command.populate populate
 
-      if options.select?
-        command.select options.select
+        if options.select?
+          command.select options.select
 
-      results = await command
-      if !results
-        callback err, null, 0
-      else
-        count = await Resource.countDocuments(query)
-        #safe because max >= 1
-        pageCount = Math.ceil(count/max) or 0
-        callback(null, results, pageCount, count) if callback
-
+        results = await command
+        if !results
+          callback err, null, 0
+        else
+          count = await Resource.countDocuments(query)
+          #safe because max >= 1
+          pageCount = Math.ceil(count/max) or 0
+          callback(null, results, pageCount, count) if callback
+      catch e
+        console.debug "GI-UTIL find ERROR: "
+        console.debug e
+        console.debug "Query was: "
+        console.debug JSON.stringify query
+        callback e
 
   findOne = (query, callback) ->
     if not query? or not query.systemId?
       callback 'Cannot find ' +
       Resource.modelName + ' - no SystemId', null
     else
-      resource = await Resource.findOne query
-      if !resource
-        callback('No resource') if callback
-      else if resource
-        callback(null, resource) if callback
-      else
-        callback('Cannot find ' + Resource.modelName) if callback
+      try 
+        resource = await Resource.findOne query
+        if !resource
+          callback('No resource') if callback
+        else if resource
+          callback(null, resource) if callback
+        else
+          callback('Cannot find ' + Resource.modelName) if callback
+      catch e
+        console.debug "GI-UTIL findOne ERROR: "
+        console.debug e
+        console.debug "Query was: "
+        console.debug JSON.stringify query
+        callback e
 
   findOneBy = (key, value, systemId, callback) ->
     query =
