@@ -37,10 +37,12 @@ schemaFactory = (def) ->
   _schema
 
 modelFactory = (def) ->
-  if def.options?.collectionName?
-    mongoose.model def.name, def.schema, def.options.collectionName
+  if mongoose.models[def.name]
+    return mongoose.model(def.name)
+  else if def.options?.collectionName?
+    return mongoose.model(def.name, def.schema, def.options.collectionName)
   else
-    mongoose.model def.name, def.schema
+    return mongoose.model(def.name, def.schema)
 
 module.exports =
 
