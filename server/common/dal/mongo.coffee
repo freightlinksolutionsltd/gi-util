@@ -63,8 +63,10 @@ module.exports =
     options =
       mongoUrl: getConnectionString(conf)
       autoRemove: "interval"
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      mongoOptions:
+        useNewUrlParser: true
+        useUnifiedTopology: true
+
     #MongoStore = new connectMongo(express)
 
     sessionStore = connectMongo.create(options)
