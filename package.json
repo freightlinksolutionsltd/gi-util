@@ -1,7 +1,7 @@
 {
   "author": "Go Incremental Limited",
   "name": "@freightlinksolutionsltd/gi-util",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "./server/index.coffee",
   "scripts": {
     "test": "grunt ci",
