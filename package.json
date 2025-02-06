@@ -1,14 +1,18 @@
 {
   "author": "Go Incremental Limited",
-  "name": "gi-util",
+  "name": "@freightlinksolutionsltd/gi-util",
   "version": "2.0.0",
   "main": "./server/index.coffee",
   "scripts": {
-    "test": "grunt ci"
+    "test": "grunt ci",
+    "publish:new": "npm version patch && npm publish && git push --follow-tags"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/goincremental/gi-util.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
     "async": "~2.6.1",
