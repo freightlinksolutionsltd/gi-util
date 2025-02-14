@@ -54,7 +54,7 @@ module.exports = (Resource) ->
     if max < 1
       callback(null, [], 0, 0) if callback
     else
-      try 
+      try
         command = Resource.find(query).sort(sort).skip(skipFrom).limit(max)
         if options.populate?
           command.populate populate
@@ -82,7 +82,7 @@ module.exports = (Resource) ->
       callback 'Cannot find ' +
       Resource.modelName + ' - no SystemId', null
     else
-      try 
+      try
         resource = await Resource.findOne query
         if !resource
           callback('No resource') if callback
@@ -111,7 +111,7 @@ module.exports = (Resource) ->
     command = Resource.find(opts.query)
     if opts.sort?
       command.sort opts.sort
-    
+
     if opts.populate?
       command.populate opts.populate
 
@@ -156,7 +156,7 @@ module.exports = (Resource) ->
         callback null, deleteResource
       else
         callback Resource.modelName + ' could not be destroyed'
-  
+
   aggregate = (steps, callback) ->
     resource = await Resource.aggregate steps
     if !resource

@@ -39,7 +39,7 @@ angular.module('gi.util').provider 'giAnalytics', () ->
 
         sendPageView()
         ga('ec:addImpression', obj )
-        ga('send', 'event', 'Detail', 'click', 'View Detail: ' + obj.id , 1);
+        ga('send', 'event', 'Detail', 'click', 'View Detail: ' + obj.id , 1)
 
 
     sendDetailView: sendDetailView

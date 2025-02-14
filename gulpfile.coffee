@@ -11,7 +11,7 @@ buildDir = 'dist'
 modulePath = 'gi-util'
 
 coffee = () ->
-  gulp.src(['client/**/*.coffee'])
+  gulp.src(['client/**/*.coffee', 'server/**/*.coffee'])
   .pipe(coffeelint())
   .pipe(coffeelint.reporter())
   .pipe(coffeeCompiler {bare: true}).on('error', gutil.log)

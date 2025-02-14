@@ -1,5 +1,5 @@
 {
-  "author": "Go Incremental Limited",
+  "author": "Freightlink Solutions Ltd",
   "name": "@freightlinksolutionsltd/gi-util",
   "version": "2.0.2",
   "main": "./server/index.coffee",
@@ -36,6 +36,7 @@
     "del": "^3.0.0",
     "gulp": "^3.8.11",
     "gulp-angular-templatecache": "^2.2.2",
+    "gulp-cli": "^3.0.0",
     "gulp-coffee": "^3.0.2",
     "gulp-coffeelint": "^0.6.0",
     "gulp-concat": "^2.5.2",
