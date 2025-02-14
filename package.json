@@ -2,7 +2,7 @@
   "author": "Freightlink Solutions Ltd",
   "name": "@freightlinksolutionsltd/gi-util",
   "version": "2.0.2",
-  "main": "./server/index.coffee",
+  "main": "./dist/gi-util.js",
   "scripts": {
     "test": "grunt ci",
     "publish:new": "npm version patch && npm publish && git push --follow-tags"
